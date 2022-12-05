@@ -10,7 +10,7 @@
                     <input
                         type="search"
                         :value="currentRefinement"
-                        placeholder="Search for a artist"
+                        placeholder="Search an artist"
                         @input="refine($event.currentTarget.value)"
                     >
                     <ul v-if="currentRefinement" v-for="index in indices" :key="index.indexId">
@@ -34,26 +34,36 @@
             </ais-autocomplete>
         </ais-instant-search>
         <label>Album</label>
-        <div>
-            <ul v-for="album in albums" :key="album.id">
-                <li>
-                   <h3>{{album.name}}</h3>
-                    <button @click="this.albumId = album.id">Choose album</button>
-                </li>
-            </ul>
-        </div>
+       <select v-model="albumId">
+           <option v-for="album in albums" :value="album.id">{{album.name}}</option>
+       </select>
+        <label>Genre</label>
+        <select v-model="genreId">
+            <option v-for="genre in genres" :value="genre.id">{{genre.name}}</option>
+        </select>
         <label>Name</label>
         <input type="text" v-model="songName">
         <div class="input-group mb-3">
-            <input class="filepond" type="file" ref="image" accept="image/*" @input="fileUpload">
-            <div class="row row-cols-3">
-                <div class="col" >
-                    {{image.name}}
-                    <img ref="image"  style="width: 200px; height: 200px; "/>
-                </div>
-            </div>
+            <label>Image</label>
+            <input class="filepond" type="file" ref="image" accept="image/*" @input="fileUploadImage">
+<!--            <div class="row row-cols-3">-->
+<!--                <div class="col" >-->
+<!--                    {{image.name}}-->
+<!--                    <img ref="image"  style="width: 200px; height: 200px; "/>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
-        <button @click="uploadData">Create Album</button>
+        <div class="input-group mb-3">
+            <label>Song</label>
+            <input class="filepond" type="file" ref="song" accept=".mp3, audio/*" @input="fileUploadSong">
+            <!--            <div class="row row-cols-3">-->
+            <!--                <div class="col" >-->
+            <!--                    {{image.name}}-->
+            <!--                    <img ref="image"  style="width: 200px; height: 200px; "/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+        <button @click="uploadData">Save Song</button>
     </div>
 </template>
 
@@ -63,6 +73,9 @@ import algoliasearch from "algoliasearch/lite";
 export default {
     name: "create-song",
     data:()=>({
+        genres:'',
+        song:'',
+        genreId:'',
         albums: '',
         artistId:'',
         songName: '',
@@ -75,6 +88,44 @@ export default {
         ),
     }),
     methods:{
+        getGenres(){
+            axios.get('/genre/get')
+                .then(({data})=>{
+                    this.genres = data.genres;
+                })
+        },
+        uploadData(){
+            const data = new FormData;
+            data.append('artist_id',this.artistId);
+            data.append('album_id',this.albumId);
+            data.append('image',this.image);
+            data.append('track',this.track);
+            data.append('name',this.songName);
+            data.append('genre_id',this.genreId)
+            axios.post('/song/store', data,{
+                headers:{
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type':'multipart/form-data',
+                }
+            })
+                .then(({data})=>{
+                    console.log(data);
+                })
+                .catch(error =>{
+                    console.log(error.response);
+                })
+        },
+        changeAlbumId(id) {
+            this.albumId = id;
+        },
+        fileUploadImage() {
+            this.image = this.$refs.image.files[0];
+            console.log(this.image);
+        },
+        fileUploadSong() {
+          this.track = this.$refs.song.files[0];
+          console.log(this.track)
+        },
       getAlbums(){
           const data = new FormData;
           data.append('artistId',this.artistId)
@@ -96,6 +147,9 @@ export default {
             this.getAlbums();
         }
     },
+    mounted() {
+        this.getGenres();
+    }
 }
 </script>
 

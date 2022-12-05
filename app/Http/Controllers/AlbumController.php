@@ -27,4 +27,6 @@ class AlbumController extends Controller
     {
         return response(['albums'=> $albumService->getByArtist($request->artistId)]);
     }
+
+
 }

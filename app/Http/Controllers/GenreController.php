@@ -18,4 +18,9 @@ class GenreController extends Controller
         $genre->create($request->all());
         return response(['status'=>true]);
     }
+
+    public function getAll(Genre $genre)
+    {
+        return response(['genres'=>$genre->all()]);
+    }
 }

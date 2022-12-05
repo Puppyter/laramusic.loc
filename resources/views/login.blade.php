@@ -1,4 +1,5 @@
 @extends('layouts.layout')
 @section('middleBar')
-    <login></login>
+    <auth-page></auth-page>
 @endsection
+

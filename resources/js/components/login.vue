@@ -1,23 +1,25 @@
 <template>
     <div>
-        <div class="col">
-            <p class="h1">Login</p>
+        <div>
+            <div class="col">
+                <p class="h1">Login</p>
+            </div>
+            <div class="col" style="margin-top: 2em">
+                <label class="text-black-50">Email</label>
+                <input type="text" v-model="email">
+            </div>
+            <div class="col" style="margin-top: 2em">
+                <label class="text-black-50">Password</label>
+                <input type="password" v-model="password">
+            </div>
+            <button
+                style="margin-top: 2em; margin-bottom: 3em"
+                @click="login"
+                class="btn btn-light border border-secondary text-black-50"
+            >
+                Login
+            </button>
         </div>
-        <div class="col" style="margin-top: 2em">
-            <label class="text-black-50">Email</label>
-            <input type="text" v-model="email">
-        </div>
-        <div class="col" style="margin-top: 2em">
-            <label class="text-black-50">Password</label>
-            <input type="password" v-model="password">
-        </div>
-        <button
-            style="margin-top: 2em; margin-bottom: 3em"
-            @click="login"
-            class="btn btn-light border border-secondary text-black-50"
-        >
-            Login
-        </button>
     </div>
 </template>
 
@@ -27,7 +29,6 @@ export default {
     data: () => ({
         password: '',
         email: '',
-        csrf: ''
     }),
     methods:{
       login(){
@@ -42,10 +43,10 @@ export default {
             .then(({data}) => {
                 console.log(data)
                 if (data.status === true) {
-                    window.location.href = '/';
+                    window.location.href = '/'+data.user+'/homepage';
                 }
             })
-            .catch(error =>{
+            .catch((error) =>{
                 console.log(error.response)
             })
       },

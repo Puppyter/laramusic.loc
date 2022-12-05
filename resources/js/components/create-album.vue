@@ -58,7 +58,7 @@ export default {
     methods:{
         fileUpload(){
             this.image = this.$refs.image.files[0];
-            console.log(this.image)
+            console.log(this.image);
             //     for( let i = 0; i < uploadedFiles.length; i++ ){
             //         this.images.push( uploadedFiles[i] );
             //     }

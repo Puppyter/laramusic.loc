@@ -1,10 +1,10 @@
 <template>
-    <ol v-if="state">
-        <li v-for="hit in state.hits" :key="hit.objectID">
+    <div v-if="state" class="row row-cols-4">
+        <div v-for="hit in state.hits" :key="hit.objectID" class="col">
             <slot name="item" :item="hit"> </slot>
-        </li>
-        <li class="sentinel" v-observe-visibility="visibilityChanged" />
-    </ol>
+        </div>
+        <div class="sentinel" v-observe-visibility="visibilityChanged" />
+    </div>
 </template>
 
 <script>

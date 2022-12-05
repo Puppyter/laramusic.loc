@@ -5,7 +5,8 @@
     >
         <infinite-hits>
             <template v-slot:item="item">
-                <img :src="item.image" alt="...">
+                <img :src="item.image" alt="">
+                <p>{{item.name}}</p>
             </template>
         </infinite-hits>
     </ais-instant-search>

@@ -10,21 +10,21 @@
     >
     <title>LaraMusic</title>
 </head>
-<body style="overflow: hidden;" class="min-vh-100" >
-<div class="container-fluid"  id="app">
+<body class="container-fluid" style="overflow: hidden">
+<div id="app">
     <div>
     <upper></upper>
     </div>
-    <div class="row" style="height: 75%">
+    <div class="row" style="">
         <left-bar></left-bar>
-        <div class="col w-75 bg-secondary bg-opacity-50" style="overflow: scroll">
+        <div class="col w-75 bg-secondary bg-opacity-50">
             @yield('middleBar')
         </div>
         <div class="col col-1">
             <right-bar></right-bar>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="height: 60vh">
         @if(Auth::check() == true)
             <div class="col bg-dark">
                 <a href="{{route('user.index')}}" style="text-decoration: none">{{Auth::user()->name}}</a>
@@ -34,6 +34,7 @@
             <a href="{{route('user.index')}}" style="text-decoration: none">LOGIN</a>
         </div>
         @endif
+
     </div>
     </div>
 <script src="{{ mix("js/app.js") }}" defer></script>
